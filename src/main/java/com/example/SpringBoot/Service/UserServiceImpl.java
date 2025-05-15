@@ -33,8 +33,7 @@ public class UserServiceImpl implements UserService {
     public void update(int id, User updatedUser) {
         User userToBoUpdated = show(id);
         userToBoUpdated.setId(updatedUser.getId());
-        userToBoUpdated.setFirstName(updatedUser.getFirstName());
-        userToBoUpdated.setLastName(updatedUser.getLastName());
+        userToBoUpdated.setUserName(updatedUser.getUserName());
         userToBoUpdated.setAge(updatedUser.getAge());
 
     }

@@ -2,6 +2,8 @@ package com.example.SpringBoot.model;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 
 
 @Entity
@@ -9,26 +11,26 @@ import jakarta.persistence.*;
 public class User {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "firstName")
-    private String firstName;
+    @Column(name = "userName")
+    private String userName;
 
-    @Column(name = "lastName")
-    private String lastName;
-
+    @Min(value = 18, message = " Возраст должен превышать 18 лет")
     @Column(name = "age")
     private int age;
+
+    @Column(name = "password")
+    private String password;
 
     public User() {
     }
 
-    public User(int id, String firstName, String lastName, int age) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
     }
 
     public int getId() {
@@ -47,19 +49,29 @@ public class User {
         this.age = age;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", age=" + age +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

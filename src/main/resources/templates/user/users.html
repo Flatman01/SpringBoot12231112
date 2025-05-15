@@ -20,8 +20,7 @@
     <tbody>
     <tr th:each="user : ${users}">
         <td th:text="${user.id}"></td>
-        <td th:text="${user.firstName}"></td>
-        <td th:text="${user.lastName}"></td>
+        <td th:text="${user.userName}"></td>
         <td th:text="${user.age}"></td>
         <td>
             <form th:action="@{/users/delete/{id}(id=${user.id})}" method="post" style="display:inline;">
