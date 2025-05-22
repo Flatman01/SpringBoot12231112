@@ -3,10 +3,12 @@ package com.example.SpringBoot.Service;
 
 
 import com.example.SpringBoot.model.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface UserService {
+public interface UserService{
 
     List<User> index();
 
