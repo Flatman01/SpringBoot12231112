@@ -27,8 +27,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .permitAll()
+                        .permitAll()   // Используется встроенная форма логина Spring Security
                 )
                 .logout(logout -> logout
                         .permitAll()
