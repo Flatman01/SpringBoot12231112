@@ -21,18 +21,14 @@ public class User {
     @Column(name = "username")
     private String username;
 
-    @Min(value = 18, message = " Возраст должен превышать 18 лет")
-    @Column(name = "age")
-    private int age;
-
     @Column(name = "password")
     private String password;
 
     public User() {
     }
 
-    public User(String userName, String password) {
-        this.username = userName;
+    public User(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 
@@ -44,19 +40,12 @@ public class User {
         this.id = id;
     }
 
-    public int getAge() {
-        return age;
-    }
 
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         this.username = userName;
     }
 
@@ -72,8 +61,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", userName='" + username + '\'' +
-                ", age=" + age +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

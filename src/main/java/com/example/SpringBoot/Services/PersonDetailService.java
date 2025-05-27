@@ -3,7 +3,7 @@ package com.example.SpringBoot.Services;
 import com.example.SpringBoot.repository.UserRepository;
 import com.example.SpringBoot.sercurity.PersonDetails;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
+import com.example.SpringBoot.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +27,6 @@ public class PersonDetailService implements UserDetailsService {
         if (user.isEmpty())
             throw new UsernameNotFoundException("User not found");
 
-        return user.get();
+        return new PersonDetails(user.get());
     }
 }
