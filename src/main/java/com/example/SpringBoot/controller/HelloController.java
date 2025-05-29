@@ -1,24 +1,20 @@
 package com.example.SpringBoot.controller;
 
-import com.example.SpringBoot.sercurity.PersonDetails;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import java.security.Principal;
+
+@RestController
 public class HelloController {
-    @GetMapping("/hello")
-    public String sayHello() {
+
+    @GetMapping("/")
+    public String homePage() {
         return "hello";
     }
 
-    @GetMapping("/showUserInfo")
-    public String showUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        System.out.println(personDetails.getUser());
-
-        return "hello";
+    @GetMapping("/authenticated")
+    public String pageAuthenticatedUsers(Principal principal) {
+        return "secured part of web service: " + principal.getName();
     }
 }
