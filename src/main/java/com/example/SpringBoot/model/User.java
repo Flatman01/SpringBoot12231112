@@ -6,9 +6,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.util.Collection;
+
 
 @Entity
-@Table(name = "userlist")
+@Table(name = "listspringsecurity")
 public class User {
 
     @Id
@@ -65,4 +67,10 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    @ManyToMany
+    @JoinTable(name = "users_roles",
+                        joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
 }
