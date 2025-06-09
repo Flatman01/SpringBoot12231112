@@ -10,13 +10,13 @@ import java.util.Collection;
 
 
 @Entity
-@Table(name = "listspringsecurity")
+@Table(name = "users", schema = "public")
 public class User {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
     @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длинной")
@@ -34,11 +34,11 @@ public class User {
         this.password = password;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -78,7 +78,7 @@ public class User {
     }
 
     @ManyToMany
-    @JoinTable(name = "users_roles",
+    @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;

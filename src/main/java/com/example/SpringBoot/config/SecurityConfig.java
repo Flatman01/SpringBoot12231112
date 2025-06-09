@@ -4,7 +4,9 @@ import com.example.SpringBoot.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,10 +17,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
-    public void setUserService(UserService userService) {
+    public SecurityConfig(UserService userService) {
         this.userService = userService;
     }
 
@@ -28,29 +30,35 @@ public class SecurityConfig {
     }
 
     @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+        authenticationProvider.setUserDetailsService(userService);
+        return authenticationProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
+                .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/read_profile").hasAuthority("READ_PROFILE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .defaultSuccessUrl("/authenticated", true)
                         .permitAll()
                 )
-                .logout(logout -> logout
-                        .permitAll()
-                );
+                .logout(logout -> logout.permitAll());
 
         return http.build();
-    }
-
-
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        authenticationProvider.setUserDetailsService(userService);
-        return authenticationProvider;
     }
 }
