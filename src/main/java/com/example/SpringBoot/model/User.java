@@ -1,8 +1,6 @@
 package com.example.SpringBoot.model;
 
-import jakarta.persistence.Id;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
