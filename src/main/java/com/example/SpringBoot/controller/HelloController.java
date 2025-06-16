@@ -38,4 +38,9 @@ public class HelloController {
     public String pageOnlyForAdmins() {
         return "admin page";
     }
+
+    @GetMapping("/user")
+    public String pageOnlyForUsers() {
+        return "user page";
+    }
 }
