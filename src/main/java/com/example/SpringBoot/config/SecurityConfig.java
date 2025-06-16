@@ -1,6 +1,7 @@
 package com.example.SpringBoot.config;
 
 import com.example.SpringBoot.Services.UserService;
+import com.example.SpringBoot.util.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserService userService;
+
+    @Autowired
+    private LoginSuccessHandler successHandler;
 
     @Autowired
     public SecurityConfig(UserService userService) {
@@ -42,6 +46,8 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -55,7 +61,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/authenticated", true)
+                        .successHandler(successHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll());
