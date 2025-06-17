@@ -1,0 +1,36 @@
+<!-- src/main/resources/templates/admin/edit.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Редактировать пользователя</title>
+</head>
+<body>
+<h2>Редактирование пользователя</h2>
+
+<form th:action="@{'/admin/' + ${user.id}}" th:object="${user}" method="post">
+  <label>Имя пользователя:
+    <input type="text" th:field="*{username}" />
+  </label>
+  <br/>
+
+  <label>Пароль:
+    <input type="password" th:field="*{password}" />
+  </label>
+  <br/>
+
+  <label>Роли:
+    <select th:field="*{roles}" multiple="multiple" size="5">
+      <option th:each="role : ${roles}"
+              th:value="${role}"
+              th:text="${role.name}"></option>
+    </select>
+  </label>
+  <br/>
+
+  <button type="submit">Сохранить</button>
+</form>
+
+<a href="/admin">Назад к списку пользователей</a>
+</body>
+</html>

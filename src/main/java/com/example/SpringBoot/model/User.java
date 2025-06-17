@@ -6,23 +6,29 @@ import jakarta.validation.constraints.Size;
 
 import java.util.Collection;
 
-
 @Entity
 @Table(name = "users", schema = "public")
 public class User {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов длинной")
-    @Column(name = "username")
+    @Size(min = 2, max = 100, message = "Имя должно быть от 2 до 100 символов")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
     private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Collection<Role> roles;
 
     public User() {
     }
@@ -40,13 +46,12 @@ public class User {
         this.id = id;
     }
 
-
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -56,7 +61,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     public Collection<Role> getRoles() {
         return roles;
@@ -71,13 +75,7 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
     }
-
-    @ManyToMany
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
 }

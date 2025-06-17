@@ -1,0 +1,13 @@
+<!-- templates/user/profile.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Профиль</title>
+</head>
+<body>
+<h2>Ваш профиль</h2>
+<p><strong>Имя пользователя:</strong> <span th:text="${user.username}"></span></p>
+<p><strong>ID:</strong> <span th:text="${user.id}"></span></p>
+<a th:href="@{/logout}">Выход</a>
+</body>
+</html>
