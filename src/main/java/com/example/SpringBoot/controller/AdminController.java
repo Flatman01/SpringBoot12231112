@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,10 +41,13 @@ public class AdminController {
         return "admin/create";  // форма создания
     }
 
-    @PostMapping
-    public String createUser(@ModelAttribute("user") User user) {
-        userService.save(user);
-        return "redirect:/admin/users";
+    @GetMapping("/admin/users/new")
+    public String createUserForm(Model model) {
+        User user = new User();
+        user.setRoles(new HashSet<>()); // Пустой Set, чтобы roles не было null
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roleRepository.findAll()); // список ролей
+        return "admin/create";
     }
 
     @GetMapping("/{id}/edit")
@@ -77,5 +81,18 @@ public class AdminController {
         return "redirect:/admin/users";
     }
 
+    @PostMapping("/save")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String saveUser(@ModelAttribute User user,
+                           @RequestParam(value = "roles", required = false) List<Long> roleIds) {
+        if (roleIds != null) {
+            Set<Role> roles = roleRepository.findAllById(roleIds).stream().collect(Collectors.toSet());
+            user.setRoles(roles);
+        } else {
+            user.setRoles(Collections.emptySet());
+        }
+        userService.save(user);
+        return "redirect:/admin/users";
+    }
 
 }
