@@ -20,11 +20,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
             Authentication authentication) throws IOException, ServletException {
 
         if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
-            response.sendRedirect("/admin");
+            response.sendRedirect("/admin/users");
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_USER"))) {
-            response.sendRedirect("/templates");
+            response.sendRedirect("user/profile");
         } else {
-            response.sendRedirect("/");
+            response.sendRedirect("/admin/users");
         }
     }
 }

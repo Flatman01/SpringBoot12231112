@@ -1,4 +1,3 @@
-<!-- src/main/resources/templates/admin/edit.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,31 +5,23 @@
   <title>Редактировать пользователя</title>
 </head>
 <body>
-<h2>Редактирование пользователя</h2>
 
-<form th:action="@{'/admin/' + ${user.id}}" th:object="${user}" method="post">
-  <label>Имя пользователя:
-    <input type="text" th:field="*{username}" />
-  </label>
-  <br/>
+<h1>Редактировать пользователя</h1>
 
-  <label>Пароль:
-    <input type="password" th:field="*{password}" />
-  </label>
-  <br/>
+<form th:action="@{/admin/users/{id}(id=${user.id})}" th:object="${user}" method="post">
+  <input type="text" th:field="*{username}" />
 
-  <label>Роли:
-    <select th:field="*{roles}" multiple="multiple" size="5">
-      <option th:each="role : ${roles}"
-              th:value="${role}"
-              th:text="${role.name}"></option>
-    </select>
-  </label>
-  <br/>
+  <div th:each="role : ${roles}">
+    <input type="checkbox"
+           th:id="${'role_' + role.id}"
+           th:name="roles"
+           th:value="${role.id}"
+           th:checked="${user.roles.contains(role)}" />
+    <label th:for="${'role_' + role.id}" th:text="${role.name}"></label>
+  </div>
 
   <button type="submit">Сохранить</button>
 </form>
 
-<a href="/admin">Назад к списку пользователей</a>
 </body>
 </html>

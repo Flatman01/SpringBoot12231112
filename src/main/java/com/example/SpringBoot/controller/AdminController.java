@@ -1,12 +1,18 @@
 package com.example.SpringBoot.controller;
 
 import com.example.SpringBoot.Service.UserService;
+import com.example.SpringBoot.model.Role;
 import com.example.SpringBoot.model.User;
 import com.example.SpringBoot.repository.RoleRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -48,11 +54,19 @@ public class AdminController {
     }
 
     @PostMapping("/{id}")
-    public String updateUser(@PathVariable Long id, @ModelAttribute("user") User updatedUser) {
+    public String updateUser(@PathVariable Long id, @ModelAttribute("user") User updatedUser,
+                             @RequestParam(value = "roles", required = false) List<Long> roleIds) {
         User existingUser = userService.findById(id);
         existingUser.setUsername(updatedUser.getUsername());
         existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setRoles(updatedUser.getRoles());
+
+        if (roleIds != null) {
+            Set<Role> roles = roleRepository.findAllById(roleIds).stream().collect(Collectors.toSet());
+            existingUser.setRoles(roles);
+        } else {
+            existingUser.setRoles(Collections.emptySet());
+        }
+
         userService.save(existingUser);
         return "redirect:/admin/users";
     }
@@ -62,4 +76,6 @@ public class AdminController {
         userService.delete(id);
         return "redirect:/admin/users";
     }
+
+
 }
